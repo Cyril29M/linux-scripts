@@ -13,8 +13,8 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-# Nom de la sauvegarde avecnomage et la date au format ISO 8601
-backup_name="$1-$(date +'%Y-%m-%dT%H:%M:%S').tar.gz"
+# Nom de la sauvegarde avec nomage et la date au format ISO 8601
+backup_name="$1-$(date --iso-8601).tar.gz"
 
 # Chemin du dossier personnel de l'utilisateur
 user_home="/home/$1"
@@ -26,11 +26,13 @@ backup_path="/var/backups/$1/$backup_name"
 mkdir -p "$(dirname $backup_path)"
 
 # Sauvegarde du dossier personnel
-tar -czvf "$backup_path" "$user_home"
+tar -czf "$backup_path" "$user_home"
 
 
-# Copie de la sauvegarde sur le serveur distant via rsync et ssh
-#rsync -avz -e ssh "$backup_path" simplon@simplon:/backup/
+# Copie de la sauvegarde sur le serveur distant via scp et ssh
+#rsync -avz -e ssh "$backup_path" simplon@simplon:/var/backups/
+sshpass -p "simplon" scp -r -p /var/backups/$1/$backup_name simplon@192.168.85.132:/var/backups/$backup_name
+#sshpass -p "simplon" scp -r -p simplon@192.168.85.131:/var/backups/$backup_name simplon@192.168.85.132:/var/backups
 
 # Suppression de la sauvegarde locale
-rm "$backup_name"
+rm -R "/var/backups/$1/"
