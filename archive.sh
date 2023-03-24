@@ -30,9 +30,7 @@ tar -czf "$backup_path" "$user_home"
 
 
 # Copie de la sauvegarde sur le serveur distant via scp et ssh
-#rsync -avz -e ssh "$backup_path" simplon@simplon:/var/backups/
-sshpass -p "simplon" scp -r -p /var/backups/$1/$backup_name simplon@192.168.85.132:/var/backups/$backup_name
-#sshpass -p "simplon" scp -r -p simplon@192.168.85.131:/var/backups/$backup_name simplon@192.168.85.132:/var/backups
+sshpass -p "xxx" scp -p /var/backups/$1/$backup_name xxx@xxx:/var/backups/$backup_name
 
 # Suppression de la sauvegarde locale
 rm -R "/var/backups/$1/"
